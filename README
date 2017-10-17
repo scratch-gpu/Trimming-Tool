@@ -1,0 +1,99 @@
+
+Contents:
+1) Introduction
+2) File/folder description
+3) System Requirements
+4) Input requirements
+5) Run instructions
+6) Current limitations
+################################################################################
+################################################################################
+
+1) Introduction
+    The following is the README for the SCRATCH tool (the tool). 
+    The tool performs two functions in its current state:
+        a. Analyzing a OpenCL application (compiled for the Southern Islands
+      architecture)
+        b. Trimming the MIAOW FPGA core to support only the instructions for the
+      given application.
+    This README aims at enabling a developer to easily use the tool.
+    If any difficulty is encountered please do not hesitate to contact:
+################################################################################
+################################################################################
+
+2) File/folder description
+   - app_proc.py -- Contains the class responsible for analyzing the application.
+                 -- Not executable.
+   - scratch.py  -- Contains the class responsible for trimming the core. 
+                 -- Contains argument parsing.
+                 -- Executable.
+   - __init__.py -- Imports all the above
+                 -- Not executable.
+   - README      -- Contains general information about the tool and its usage.
+################################################################################
+################################################################################
+
+3) System Requirements
+    - To run the tool:
+        - System capable of using a python interpreter (Unix/Windows/Mac)
+        - Python 2.7.13
+
+    - To use the tool:
+        - AMD CodeXL
+
+    - To test the resulting RTL:
+        - Xilinx Vivado 2015.1
+        - Virtex 7 board
+################################################################################
+################################################################################
+
+4) Input requirements
+    Running the tool requires two inputs:
+        a. CSV file extracted from CodeXL upon kernel compilation
+        b. MIAOW FPGA core
+            b.1. https://github.com/VerticalResearchGroup/miaow/wiki/Neko
+################################################################################
+################################################################################
+
+5) Run instructions
+    To run MIAOW the inputs described above (see 4) must be provided via command
+  line arguments:
+      a. "-f" or "--instruction_csv" specifies the CSV file outputted by CodeXL.
+      b. "-m" or "--MIAOW_folder" specifies the folder containing the MIAOW FPGA
+    core RTL description. The path must be relative to the script execution dir.
+    By default this parameter is "fpga_core" corresponding to:
+      "<execution_dir>/fpga_core"
+    Example command 1:
+      ./scratch.py -f mmult_int.csv -m ../fpga_core
+    Example command 2 - assumes that fpga_core folder exists in the script folder:
+      ./scratch.py -f mmult_int.csv
+################################################################################
+################################################################################
+
+6) Current limitations
+   App_proc.py:
+       Supports only a subset of the full Southern Islands ISA. Namely the
+     following types:
+           VOPC
+           VOP1
+           VOP2
+           SOPP
+           SOPC
+           SOP1
+           SOPK
+           SOP2
+           SMRD
+           VOP3a
+           MTBUF
+   scratch:
+       Considers only the following files:
+           decode_core.v
+           compute_unit.v
+           simd_alu.v
+           salu.v
+           simf.v
+       Future additions:
+        decode units   in valus
+        flag_generator in decode
+################################################################################
+################################################################################
